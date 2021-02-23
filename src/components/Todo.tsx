@@ -32,13 +32,16 @@ const Todo = () => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
-  console.log(posts);
-  const paginate = pageNumber => setCurrentPage(pageNumber);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(posts.length / postsPerPage); i++) {
     pageNumbers.push(i);
   }
-  const isDisable = posts.length > pageNumbers.length;
+  //const isDisable = posts.length > pageNumbers.length;
+  const isActive = pageNumbers.some(active => active === currentPage);
+  console.log(isActive);
+  const paginate = pageNumber => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <>
       {currentPosts.map(item => (
@@ -50,22 +53,28 @@ const Todo = () => {
       ))}
 
       <nav className="flex">
-        {pageNumbers.map((number, i) => (
-          <div key={i}>
-            <button
-              type="button"
-              disabled={true}
-              className={`py-2 px-4 mx-2 rounded-full text-gray-400 ${
-                isDisable
-                  ? "bg-purple-600 opacity-25 pointer-events-none"
-                  : "bg-purple-600"
-              }`}
-              onClick={() => paginate(number)}
-            >
-              {number}
-            </button>
-          </div>
-        ))}
+        {pageNumbers.map((number, i) => {
+          const act = currentPage === number;
+          return (
+            <div key={i}>
+              <button
+                type="button"
+                //disabled={true}
+                className={`py-2 px-4 mx-2 rounded-full text-gray-400 ${
+                  act ? "bg-pink-500" : "bg-purple-600"
+                }`}
+                // ${
+                //   isDisable
+                //     ? "bg-purple-600 opacity-25 pointer-events-none"
+                //     : "bg-purple-600"
+                // }`}
+                onClick={() => paginate(number)}
+              >
+                {number}
+              </button>
+            </div>
+          );
+        })}
       </nav>
     </>
   );
